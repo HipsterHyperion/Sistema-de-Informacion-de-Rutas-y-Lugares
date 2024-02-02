@@ -22,7 +22,7 @@
                   <Component id="botonAbrir" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
                   <Component id="botonPrueba" alignment="0" min="-2" pref="120" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="322" max="32767" attributes="0"/>
+              <EmptySpace pref="954" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -33,7 +33,7 @@
               <Component id="botonAbrir" min="-2" pref="60" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
               <Component id="botonPrueba" min="-2" pref="60" max="-2" attributes="0"/>
-              <EmptySpace pref="126" max="32767" attributes="0"/>
+              <EmptySpace pref="466" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

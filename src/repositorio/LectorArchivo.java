@@ -1,11 +1,13 @@
 
-package modelo.entidad;
+package repositorio;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import modelo.entidad.ActivitySegment;
+import modelo.entidad.PlaceVisit;
 import org.jxmapviewer.viewer.GeoPosition;
-import repositorio.Repositorio;
+import repositorio.Fuente;
 
 public class LectorArchivo {
 
@@ -13,11 +15,11 @@ public class LectorArchivo {
     private FileReader fr;
     private BufferedReader br;
     private String linea;
-    private Repositorio repositorio;
+    private Fuente repositorio;
     
     
     // 
-    public LectorArchivo(String path, Repositorio repositorio) {
+    public LectorArchivo(String path, Fuente repositorio) {
         this.repositorio = repositorio;
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
@@ -50,6 +52,7 @@ public class LectorArchivo {
             } catch (IOException e2) {
             }
         }
+        ordenarListas();
     }
 
     
@@ -285,4 +288,8 @@ public class LectorArchivo {
         repositorio.nuevoActivitySegment(activitysegment);
     }
 
+    private void ordenarListas(){
+        repositorio.ordenarListas();
+    }
+    
 }

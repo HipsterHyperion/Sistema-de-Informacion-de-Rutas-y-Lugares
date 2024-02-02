@@ -16,29 +16,29 @@ public class MainPanel extends javax.swing.JPanel {
     private TabFiltros tabFiltro;
     private TabConfiguracion tabConf;
     private TabLugares tabLug;
+    private TabRutas tabRutas;
 
     
     public MainPanel(ControlPanel control) {
-        
         this.control = control;
-        tabFechas = new TabFechas(this, control.getFechas());
-        tabFiltro = new TabFiltros(this, control.getFechas().getFirst(), control.getFechas().getLast());
-        tabLug = new TabLugares(this, control.getPlaceVisits());
-        tabConf = new TabConfiguracion(this);
         initComponents();
         initTabs();
         mapViewer.init();
-        tabConf.initGraph(control.getActivitySegments(), control.getPlaceVisits());
         mapViewer.setWaypoints(control.getWaypoints());
     }
     
     
     private void initTabs(){
-        tabLeft.addTab("FECHAS", tabFechas);
-        tabLeft.addTab("FILTRO", tabFiltro);
-        tabMain.addTab("RUTAS", new TabRutas());
-        tabMain.addTab("LUGARES", tabLug);
-        tabMain.addTab("CONFIGURACION", tabConf);
+        tabFechas = new TabFechas(this, control.getFechas());
+        tabFiltro = new TabFiltros(this, control.getFechas().getFirst(), control.getFechas().getLast());
+        tabRutas = new TabRutas(this, control.getLineaDeEventos(), control.getActivitySegments());
+        tabLug = new TabLugares(this, control.getPlaceVisits());
+        tabConf = new TabConfiguracion(this);
+        tabLeft.addTab("FECHAS", new javax.swing.ImageIcon(getClass().getResource("/icon/fechas.png")), tabFechas);
+        tabLeft.addTab("FILTRO", new javax.swing.ImageIcon(getClass().getResource("/icon/filtros.png")), tabFiltro);
+        tabMain.addTab("RUTAS", new javax.swing.ImageIcon(getClass().getResource("/icon/rutas.png")), tabRutas);
+        tabMain.addTab("LUGARES", new javax.swing.ImageIcon(getClass().getResource("/icon/lugares.png")), tabLug);
+        tabMain.addTab("CONFIGURACION", new javax.swing.ImageIcon(getClass().getResource("/icon/conf.png")), tabConf);
     }
     
     
@@ -91,6 +91,10 @@ public class MainPanel extends javax.swing.JPanel {
     }
     
     
+    public void agregarDatos(){
+        control.agregarDatosDefault();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -101,6 +105,8 @@ public class MainPanel extends javax.swing.JPanel {
         tabLeft = new javax.swing.JTabbedPane();
 
         setPreferredSize(new java.awt.Dimension(1080, 640));
+
+        tabMain.setToolTipText("");
 
         comboMapType.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         comboMapType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Open Street", "Virtual Earth", "Hybrid", "Satellite" }));
@@ -127,7 +133,7 @@ public class MainPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tabMain.addTab("MAPA", new javax.swing.ImageIcon(getClass().getResource("/icon/carro2.png")), mapViewer); // NOI18N
+        tabMain.addTab("MAPA", new javax.swing.ImageIcon(getClass().getResource("/icon/mapa.png")), mapViewer); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

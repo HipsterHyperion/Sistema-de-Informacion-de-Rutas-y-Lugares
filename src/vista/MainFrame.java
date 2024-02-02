@@ -26,14 +26,14 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void init(){
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        jTabbedPane1.addTab("Bienvenido", new PanelBienvenida());
+        jTabbedPane1.addTab("Bienvenido", new javax.swing.ImageIcon(getClass().getResource("/icon/home.png")), new PanelBienvenida());
     }
     
     
     public void nuevoTab(String title, Component panel){
         
         int tabCount = jTabbedPane1.getTabCount();
-        jTabbedPane1.addTab(title, panel);
+        jTabbedPane1.addTab(title, new javax.swing.ImageIcon(getClass().getResource("/icon/brujula.png")), panel);
         jTabbedPane1.setSelectedIndex(tabCount);
     }
 

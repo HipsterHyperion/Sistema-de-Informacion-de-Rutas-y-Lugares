@@ -4,12 +4,14 @@ package vista;
 import modelo.entidad.PlaceVisit;
 import modelo.entidad.ActivitySegment;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class PanelGraph extends javax.swing.JPanel {
@@ -17,19 +19,18 @@ public class PanelGraph extends javax.swing.JPanel {
     
     public PanelGraph() {
         initComponents();
+        jPanel1.setLayout(new BorderLayout());
     }
     
     public void init(List<ActivitySegment> activitySegments, 
         List<PlaceVisit> placeVisits){
-        jPanel1.setLayout(new BorderLayout());
         initGraficoRutas(activitySegments);
         initGraficoLugares(placeVisits);
-        updateUI();
         
     }
     
     
-    private void initGraficoRutas(List<ActivitySegment> activitySegments){
+    public void initGraficoRutas(List<ActivitySegment> activitySegments){
         
         DefaultCategoryDataset datos = new DefaultCategoryDataset();        
         for( ActivitySegment act : activitySegments){
@@ -58,10 +59,11 @@ public class PanelGraph extends javax.swing.JPanel {
 //        panel.setPreferredSize(new Dimension(tam*5,360+extra));
 
         jPanel1.add(panel,BorderLayout.NORTH);
+        updateUI();
         
     }
     
-    private void initGraficoLugares(List<PlaceVisit> placeVisits){
+    public void initGraficoLugares(List<PlaceVisit> placeVisits){
         
         LocalDateTime fechaHora1;
         LocalDateTime fechaHora2;
@@ -100,6 +102,7 @@ public class PanelGraph extends javax.swing.JPanel {
 //        chart.setPreferredSize(new Dimension(tam2*5,360));
         
         jPanel1.add(chart);
+        updateUI();
     }
     
     
@@ -111,11 +114,11 @@ public class PanelGraph extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setPreferredSize(new java.awt.Dimension(1000, 560));
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setPreferredSize(new java.awt.Dimension(720, 560));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Graficos"));
+        jScrollPane1.setBorder(null);
         jScrollPane1.setViewportView(jPanel1);
 
         add(jScrollPane1);

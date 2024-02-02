@@ -2,5 +2,5 @@ package modelo.waypoint;
 
 public interface EventWaypoint {
 
-    public void selected(MyWaypoint waypoint);
+    public void selected(MyWaypoint waypoint, boolean b);
 }

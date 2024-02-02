@@ -1,21 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
 package control;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedMap;
 import javax.swing.JOptionPane;
 import modelo.entidad.ActivitySegment;
-import modelo.entidad.LectorArchivo;
 import modelo.entidad.MyEvent;
 import modelo.entidad.PlaceVisit;
 import modelo.waypoint.EventWaypoint;
 import modelo.waypoint.MyWaypoint;
-import repositorio.Repositorio;
+import repositorio.LectorArchivo;
+import repositorio.Fuente;
 import vista.MainFrame;
 import vista.MainPanel;
 import vista.PanelDetallesEvento;
@@ -23,23 +23,19 @@ import vista.PanelDetallesEvento;
 public class ControlPanel {
 
     
-    
     private String title;
     private MainPanel mainPanel;
-    private LectorArchivo fuente;
-    private Repositorio repositorio;
-    private EventWaypoint event;
+    private LectorArchivo lector;
+    private Fuente repositorio;
     
     
     public ControlPanel() {
-        event = getEvent();
     }
     
     public ControlPanel(String title, String path){
         this.title = title;
-        this.event = getEvent();
-        repositorio = new Repositorio(this, event);
-        fuente = new LectorArchivo(path, repositorio);
+        repositorio = new Fuente(this);
+        lector = new LectorArchivo(path, repositorio);
         mainPanel = new MainPanel(this);
         MainFrame.getInstance().nuevoTab(title, mainPanel);
     }
@@ -47,46 +43,25 @@ public class ControlPanel {
     public EventWaypoint getEvent() {
         return new EventWaypoint() {
             @Override
-            public void selected(MyWaypoint waypoint) {
+            public void selected(MyWaypoint waypoint, boolean b) {
+                if(b){
+                    mainPanel.getjXMapViewer().setAddressLocation(waypoint.getPosition());
+                }
+                if (waypoint.getPointType() == MyWaypoint.PointType.STARTLOCATION
+                        || waypoint.getPointType() == MyWaypoint.PointType.WAYPOINTPATH
+                        || waypoint.getPointType() == MyWaypoint.PointType.ENDLOCATION) {
+                    
+                    initRouting(waypoint);
+                }
+                JOptionPane.showMessageDialog(mainPanel, waypoint.getTitle());
+            }
+        };
+    }
 
-                if (waypoint.getPointType() == MyWaypoint.PointType.STARTLOCATION
-                        || waypoint.getPointType() == MyWaypoint.PointType.WAYPOINTPATH
-                        || waypoint.getPointType() == MyWaypoint.PointType.ENDLOCATION) {
-                    
-                    initRouting(waypoint);
-                }
-                JOptionPane.showMessageDialog(mainPanel, waypoint.getTitle());
-            }
-        };
-    }
-    
-    
-    public EventWaypoint getEvent2() {
-        return new EventWaypoint() {
-            @Override
-            public void selected(MyWaypoint waypoint) {
-                    
-                mainPanel.getjXMapViewer().setAddressLocation(waypoint.getPosition());
-                if (waypoint.getPointType() == MyWaypoint.PointType.STARTLOCATION
-                        || waypoint.getPointType() == MyWaypoint.PointType.WAYPOINTPATH
-                        || waypoint.getPointType() == MyWaypoint.PointType.ENDLOCATION) {
-                    
-                    initRouting(waypoint);
-                }
-                JOptionPane.showMessageDialog(mainPanel, waypoint.getTitle());
-            }
-        };
-    }
     
         
     private void initRouting(MyWaypoint waypoint){
         
-//        List<GHPoint> points = new ArrayList<>();
-//        for (MyWaypoint myw : waypoint.getMyEvent().giveWaypoints()) {
-//            GHPoint ghpGeop = new GHPoint(myw.getPosition().getLatitude(), myw.getPosition().getLongitude());
-//            points.add(ghpGeop);
-//        }
-//        mainPanel.getjXMapViewer().setRoutingData(RoutingService.getInstance().routing(points));
         Set<MyWaypoint> waypoints = new HashSet<>();
         waypoints.addAll(waypoint.getMyEvent().giveWaypoints());
         mainPanel.getjXMapViewer().setWaypointsExtra(waypoints);
@@ -117,7 +92,7 @@ public class ControlPanel {
         Set<MyWaypoint> waypoints = new HashSet<>();
         for(MyEvent evento : eventos){
             waypoints.add(evento.getMainWaypoint());
-            mainPanel.getPanelEventos().add(new PanelDetallesEvento(evento, getEvent2()));
+            mainPanel.getPanelEventos().add(new PanelDetallesEvento(evento, getEvent()));
         }
         mainPanel.getjXMapViewer().setWaypoints(waypoints);
         mainPanel.getPanelEventos().updateUI();
@@ -146,7 +121,6 @@ public class ControlPanel {
     }
     
     public void aplicarFiltros(){
-        System.out.println("____\n\n\n___");
         Set<MyWaypoint> filtro = new HashSet<>();
         LocalDate fechaStart;
         LocalDate fechaEnd;
@@ -160,8 +134,6 @@ public class ControlPanel {
         }
         String horaStart = mainPanel.getTabFiltro().getHoraBoxStart();
         String horaEnd =mainPanel.getTabFiltro().getHoraBoxEnd();
-        System.out.println(horaStart);
-        System.out.println(horaEnd);
         for(PlaceVisit p : repositorio.getPlaceVisits()){
             String pEnd = p.getEndTimestamp().toString().substring(11);
             String pStart = p.getStartTimestamp().toString().substring(11);
@@ -186,6 +158,21 @@ public class ControlPanel {
         }
         mainPanel.getjXMapViewer().setWaypoints(filtro);
         
+    }
+    
+    public void agregarDatosDefault(){
+        
+        String nombreArchivo = "/2022_MAY.json";
+        // Obtener la ruta del directorio "src"
+        String directorioSrc = System.getProperty("user.dir") + File.separator + "src";
+        // Combinar la ruta del directorio "src" con el nombre del archivo
+        String rutaAbsoluta = directorioSrc + File.separator + nombreArchivo;
+        lector = new LectorArchivo(rutaAbsoluta, repositorio);
+    }
+    
+
+    public SortedMap<LocalDate, List<MyEvent>> getLineaDeEventos() {
+        return repositorio.getLineaDeEventos();
     }
     
     

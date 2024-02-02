@@ -1,7 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
 package control;
 
 import java.io.File;
@@ -10,17 +8,16 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import vista.*;
 
-/**
- *
- * @author Martín
- */
+
 public class ControlFrame {
 
     
     private static ControlFrame control; 
+    private boolean activado;
+    
     
     private ControlFrame() {
-        
+        activado = true;
         MainFrame.getInstance().setVisible(true);
     }
     
@@ -54,7 +51,15 @@ public class ControlFrame {
     }
     
     public void openFileDefault(){
-        String nombreArchivo = "/2022_APRIL.json";
+        String nombreArchivo;
+        if(activado){
+            nombreArchivo = "/2022_APRIL.json";
+            activado = false;
+        }
+        else{
+            nombreArchivo = "/2022_MAY.json";
+            activado = true;
+        }
         // Obtener la ruta del directorio "src"
         String directorioSrc = System.getProperty("user.dir") + File.separator + "src";
         // Combinar la ruta del directorio "src" con el nombre del archivo

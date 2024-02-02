@@ -1,4 +1,5 @@
 
+
 package modelo.entidad;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,10 @@ public class MyEvent implements Comparable<MyEvent>, giveSomething{
     public void setMainWaypoint(MyWaypoint mainWaypoint) {
         this.mainWaypoint = mainWaypoint;
     }
+    
+    public long getDuration(){
+        return ChronoUnit.MINUTES.between(startTimestamp, endTimestamp);
+    }
 
     
     
@@ -75,7 +80,7 @@ public class MyEvent implements Comparable<MyEvent>, giveSomething{
     public String toString() {
         return "\nstartTimestamp\t=\t" + startTimestamp
                 + "\nendTimestamp\t=\t" + endTimestamp
-                + "\nduration\t=\t" + ChronoUnit.MINUTES.between(startTimestamp, endTimestamp) + " minutos";
+                + "\nduration\t=\t" + getDuration() + " minutos";
     }
     
     

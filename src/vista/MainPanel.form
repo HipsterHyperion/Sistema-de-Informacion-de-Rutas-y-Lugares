@@ -38,6 +38,9 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="tabMain">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -47,7 +50,7 @@
               <JTabbedPaneConstraints tabName="MAPA">
                 <Property name="tabTitle" type="java.lang.String" value="MAPA"/>
                 <Property name="tabIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/icon/carro2.png"/>
+                  <Image iconType="3" name="/icon/mapa.png"/>
                 </Property>
               </JTabbedPaneConstraints>
             </Constraint>

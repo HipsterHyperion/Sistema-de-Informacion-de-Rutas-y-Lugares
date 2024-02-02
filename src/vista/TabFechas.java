@@ -2,6 +2,7 @@
 
 package vista;
 
+
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -10,7 +11,9 @@ import javax.swing.JPanel;
 
 public class TabFechas extends javax.swing.JPanel {
 
+    
     private MainPanel mainPanel;
+    
     
     public TabFechas(MainPanel mainPanel, List<LocalDate> fechas) {
         this.mainPanel = mainPanel;
@@ -52,7 +55,7 @@ public class TabFechas extends javax.swing.JPanel {
     }
        
     public void resetValores(){
-        fechasBox.setSelectedIndex(0);
+//        fechasBox.setSelectedIndex(0);
         panelEventos.removeAll();
     }
     
