@@ -3,6 +3,7 @@ package repositorio;
 
 import control.ControlPanel;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,7 +26,6 @@ public class Fuente {
     private Set<MyWaypoint> waypointsPlaceVisit;
     private List<ActivitySegment> activitySegments;
     private List<PlaceVisit> placeVisits;
-    private List<LocalDate> fechas;
     private SortedMap<LocalDate, List<MyEvent>> lineaDeEventos;
     
 
@@ -37,13 +37,9 @@ public class Fuente {
         waypointsPlaceVisit = new HashSet<>();
         activitySegments = new ArrayList<>();
         placeVisits = new ArrayList<>();
-        fechas =  new ArrayList<>();
         lineaDeEventos = new TreeMap<>();
     }
 
-    public List<LocalDate> getFechas() {
-        return fechas;
-    }
 
     public List<ActivitySegment> getActivitySegments() {
         return activitySegments;
@@ -80,6 +76,26 @@ public class Fuente {
         placevisit.initWaypoint(control.getEvent());
         waypoints.add(placevisit.getMainWaypoint());
         waypointsPlaceVisit.add(placevisit.getMainWaypoint());
+        
+        LocalDateTime fechaHoraStart;
+        LocalDateTime fechaHoraEnd;
+        fechaHoraStart = placevisit.getStartTimestamp();
+        fechaHoraEnd = placevisit.getEndTimestamp();
+        if(fechaHoraStart.getDayOfMonth()== fechaHoraEnd.getDayOfMonth()){
+            agregarPlaceVisit(placevisit);
+        }
+        else{
+            LocalDateTime aux = fechaHoraStart.toLocalDate().plusDays(1).atStartOfDay();
+            PlaceVisit nuevo =  new PlaceVisit();
+            nuevo.copiar(placevisit);
+            placevisit.setEndTimestamp(aux);
+            nuevo.setStartTimestamp(aux);
+            agregarPlaceVisit(placevisit);
+            nuevoPlaceVisit(nuevo);
+        }
+    }
+    
+    private void agregarPlaceVisit(PlaceVisit placevisit){
         placeVisits.add( placevisit);//agregar a la lista
         LocalDate fecha = placevisit.getStartTimestamp().toLocalDate();
         if(lineaDeEventos.get(fecha)!=null){
@@ -88,7 +104,6 @@ public class Fuente {
         else{
             List <MyEvent> lista = new ArrayList<>();
             lista.add(placevisit);
-            fechas.add(fecha);
             lineaDeEventos.put(fecha, lista);
         }
     }
@@ -107,7 +122,6 @@ public class Fuente {
         else{
             List <MyEvent> lista = new ArrayList<>();
             lista.add(activitysegment);
-            fechas.add(fecha);
             lineaDeEventos.put(fecha, lista);
         }
         Collections.sort(activitySegments);
@@ -116,6 +130,5 @@ public class Fuente {
     public void ordenarListas(){
         Collections.sort(placeVisits);
         Collections.sort(activitySegments);
-        Collections.sort(fechas);
     }
 }

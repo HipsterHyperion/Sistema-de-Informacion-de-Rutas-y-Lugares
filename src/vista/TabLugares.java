@@ -3,12 +3,15 @@
 package vista;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import javax.swing.JTable;
+import modelo.entidad.MyEvent;
 import modelo.entidad.PlaceVisit;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -18,17 +21,20 @@ public class TabLugares extends javax.swing.JPanel {
     private JTable tabla;
     private MainPanel mainPanel;
     
-    public TabLugares(MainPanel mainPanel, List<PlaceVisit> placeVisits) {
+    public TabLugares(MainPanel mainPanel){
         this.mainPanel = mainPanel;
         initComponents();
-        initTable(placeVisits);
-        panelGraph1.initGraficoLugares(placeVisits);
     }
     
     
+    public void init(SortedMap<LocalDate, List<MyEvent>> lineaDeEventos, List<PlaceVisit> placeVisits){
+        initTable(placeVisits);
+        panelGraph1.initGraficoLugares(lineaDeEventos);
+    }
+    
     public void initTable(List<PlaceVisit> placeVisits){
         tabla = new JTable();
-        
+        System.out.println(placeVisits.size());
         Map<String, List<PlaceVisit>> direccionesMapa = new HashMap<>();
         List<String> direccionesLista = new ArrayList<>();
         for(PlaceVisit p : placeVisits){
@@ -47,7 +53,7 @@ public class TabLugares extends javax.swing.JPanel {
         int tam = placeVisits.size();
         Object[][] data = new Object[tam][7];
         String[] columnas = {"Direccion", "Fecha", "Hora", "Duracion", "Latitud", "Longitud", "Comentarios"};
-        
+
         
         tabla.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         tabla.setModel(new javax.swing.table.DefaultTableModel(

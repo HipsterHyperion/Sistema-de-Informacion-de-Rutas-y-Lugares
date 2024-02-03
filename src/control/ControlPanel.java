@@ -73,9 +73,6 @@ public class ControlPanel {
         return repositorio.getWaypoints();
     }
     
-    public List<LocalDate> getFechas(){
-        return repositorio.getFechas();
-    }
     
     public List<ActivitySegment> getActivitySegments(){
         return repositorio.getActivitySegments();

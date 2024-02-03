@@ -2,6 +2,7 @@
 
 package modelo.entidad;
 
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -12,22 +13,29 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 public class MyEvent implements Comparable<MyEvent>, giveSomething{
     
+    
     private LocalDateTime startTimestamp;
     private LocalDateTime endTimestamp;
     private GeoPosition mainGeoPosition;
     private MyWaypoint mainWaypoint;
+    private long durationReal;
 
+    
     public MyEvent() {
     }
 
-    public MyEvent(LocalDateTime startTimestamp, LocalDateTime endTimestamp, 
-            GeoPosition mainGeoPosition, MyWaypoint mainWaypoint) {
-        this.startTimestamp = startTimestamp;
-        this.endTimestamp = endTimestamp;
-        this.mainGeoPosition = mainGeoPosition;
-        this.mainWaypoint = mainWaypoint;
-    }
     
+    public void initDurationReal(){
+        this.durationReal = getDuration();
+        }
+
+    public long getDurationReal() {
+        return durationReal;
+    }
+
+    public void setDurationReal(long durationReal) {
+        this.durationReal = durationReal;
+    }
     
     public LocalDateTime getStartTimestamp() {
         return startTimestamp;

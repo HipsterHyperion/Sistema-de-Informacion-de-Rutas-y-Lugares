@@ -17,10 +17,13 @@ public class MainPanel extends javax.swing.JPanel {
     private TabConfiguracion tabConf;
     private TabLugares tabLug;
     private TabRutas tabRutas;
-
+    private DateTimeFormatter formato;
+    
     
     public MainPanel(ControlPanel control) {
         this.control = control;
+        // Define el formato del String
+        formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         initComponents();
         initTabs();
         mapViewer.init();
@@ -29,10 +32,15 @@ public class MainPanel extends javax.swing.JPanel {
     
     
     private void initTabs(){
-        tabFechas = new TabFechas(this, control.getFechas());
-        tabFiltro = new TabFiltros(this, control.getFechas().getFirst(), control.getFechas().getLast());
+        tabFechas = new TabFechas(this );
+        tabFechas.init(control.getLineaDeEventos().keySet());
+        tabFiltro = new TabFiltros(this);
+        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1).toString(), formato);
+        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1).toString(), formato);
+        tabFiltro.init(fechaMin, fechaMax);
         tabRutas = new TabRutas(this, control.getLineaDeEventos(), control.getActivitySegments());
-        tabLug = new TabLugares(this, control.getPlaceVisits());
+        tabLug = new TabLugares(this);
+        tabLug.init(control.getLineaDeEventos(),  control.getPlaceVisits());
         tabConf = new TabConfiguracion(this);
         tabLeft.addTab("FECHAS", new javax.swing.ImageIcon(getClass().getResource("/icon/fechas.png")), tabFechas);
         tabLeft.addTab("FILTRO", new javax.swing.ImageIcon(getClass().getResource("/icon/filtros.png")), tabFiltro);
@@ -41,6 +49,14 @@ public class MainPanel extends javax.swing.JPanel {
         tabMain.addTab("CONFIGURACION", new javax.swing.ImageIcon(getClass().getResource("/icon/conf.png")), tabConf);
     }
     
+    public void reInit(){
+        tabFechas.init(control.getLineaDeEventos().keySet());
+        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1).toString(), formato);
+        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1).toString(), formato);
+        tabFiltro.init(fechaMin, fechaMax);
+        tabLug.init(control.getLineaDeEventos(),  control.getPlaceVisits());
+        
+    }
     
     public PanelMapViewer getjXMapViewer() {
         return mapViewer;
@@ -56,12 +72,14 @@ public class MainPanel extends javax.swing.JPanel {
     
     
     public void initPanelEventos() {
-        
-        // Define el formato del String
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // Convierte el String en LocalDate
-        LocalDate fecha = LocalDate.parse(tabFechas.getFechasBox().getSelectedItem().toString(), formatter);
-        control.initPanelEventos(fecha);        
+        if (tabFechas.getFechasBox().getSelectedIndex()>0){
+            // Convierte el String en LocalDate
+            LocalDate fecha = LocalDate.parse(tabFechas.getFechasBox().getSelectedItem().toString(), formato);
+            control.initPanelEventos(fecha);
+        }        
+        else{
+            resetValores();
+        }
     }
     
     public void stateChanged(){
@@ -93,6 +111,8 @@ public class MainPanel extends javax.swing.JPanel {
     
     public void agregarDatos(){
         control.agregarDatosDefault();
+        reInit();
+        updateUI();
     }
     
     @SuppressWarnings("unchecked")

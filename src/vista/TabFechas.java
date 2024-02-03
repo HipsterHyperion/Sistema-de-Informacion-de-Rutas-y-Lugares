@@ -4,44 +4,55 @@ package vista;
 
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 
 public class TabFechas extends javax.swing.JPanel {
 
-    
+    private boolean activado;
     private MainPanel mainPanel;
     
     
-    public TabFechas(MainPanel mainPanel, List<LocalDate> fechas) {
+    public TabFechas(MainPanel mainPanel) {
         this.mainPanel = mainPanel;
+        activado = false;
         initComponents();
-        initFechasBox(fechas);
-    }
-
-    
-    private void initFechasBox(List<LocalDate> fechas) {
-        fechasBox.removeAllItems();
-        fechasBox.addItem("FECHAS");
-        for (LocalDate fecha : fechas) {
-            fechasBox.addItem(fecha.toString());
-        }
-        
         fechasBox.addItemListener((java.awt.event.ItemEvent evt) -> {
             fechasBoxItemStateChanged();
         });
     }
     
+    public void init(Set<LocalDate> fechas){
+        Object [] o = fechas.toArray();
+        System.out.println(o[0]);
+        System.out.println(o[o.length-1]);
+        initFechasBox(fechas);
+    }
+    
+
+    
+    private void initFechasBox(Set<LocalDate> fechas) {
+        activado = false;
+        fechasBox.removeAllItems();
+        fechasBox.addItem("FECHAS");
+        for (LocalDate fecha : fechas) {
+            fechasBox.addItem(fecha.toString());
+        }
+        int wer = fechasBox.getItemCount();
+        System.out.println(wer);
+        System.out.println(fechasBox.getItemAt(1));
+        System.out.println(fechasBox.getItemAt(wer-1));
+        System.out.println(fechasBox.getItemAt(wer));
+        activado = true;
+        updateUI();
+    }
+    
     private void fechasBoxItemStateChanged() {                                           
 
-        if (fechasBox.getSelectedIndex() > 0) {
+        if (activado){
             mainPanel.initPanelEventos();
-        }
-        else
-        {
-            mainPanel.resetValores();
         }
     }  
 

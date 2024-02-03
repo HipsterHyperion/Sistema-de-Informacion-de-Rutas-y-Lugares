@@ -1,5 +1,7 @@
 
+
 package modelo.entidad;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,21 +9,20 @@ import modelo.waypoint.EventWaypoint;
 import modelo.waypoint.MyWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
-/**
- *
- * @author Marti
- */
+
 public class PlaceVisit extends MyEvent{
+    
     
     private String address;
     private boolean visitImportance;
     private List<GeoPosition> childVisits;
-        
+    private String name;
     private List<MyWaypoint> waypoints;
 
     public PlaceVisit() {
         childVisits = new ArrayList<>();
         waypoints = new ArrayList<>();
+        name = "";
     }
 
     public GeoPosition getLocation() {
@@ -42,6 +43,14 @@ public class PlaceVisit extends MyEvent{
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isVisitImportance() {
@@ -108,6 +117,17 @@ public class PlaceVisit extends MyEvent{
     @Override
     public List<GeoPosition> giveGeoPositions(){
         return this.childVisits;
+    }
+    
+    public void copiar(PlaceVisit original){
+        this.address = original.address;
+        this.name = original.name;
+        this.visitImportance = original.visitImportance;
+        this.childVisits = original.childVisits;
+        this.setStartTimestamp(original.getStartTimestamp());
+        this.setEndTimestamp(original.getEndTimestamp());
+        this.setLocation(original.getLocation());
+        this.setDurationReal(original.getDurationReal());
     }
     
 }

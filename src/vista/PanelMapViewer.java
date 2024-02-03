@@ -156,24 +156,26 @@ public class PanelMapViewer extends JXMapViewer {
     
     public void cambiarTileFactory(int tipo){
         TileFactoryInfo info;
-        int zoom = getZoom();
+//        int zoom = getZoom();
         switch (tipo) {
             case 0:
             info = new OSMTileFactoryInfo();
             break;
             case 1:
-            info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
-            break;
+                setZoom(4);
+                info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
+                break;
             case 2:
-            info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
-            break;
+                setZoom(4);
+                info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+                break;
             default:
-            info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE);
-            break;
+                setZoom(4);
+                info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE);
+                break;
         }
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         setTileFactory(tileFactory);
-        setZoom(zoom);
     }
     
     

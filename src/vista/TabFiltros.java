@@ -1,5 +1,7 @@
 
+
 package vista;
+
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -14,20 +16,11 @@ public class TabFiltros extends javax.swing.JPanel {
     private Date max;
     
     
-    public TabFiltros(MainPanel mainPanel, LocalDate min, LocalDate max) {
+    public TabFiltros(MainPanel mainPanel ) {
     
         this.filtroActivado = false;
         this.mainPanel = mainPanel;
         initComponents();
-        init();
-        this.min = toDate(min);
-        this.max = toDate(max);
-        limitarFecha(this.min, this.max);
-        fechaStart.setDate(this.min);
-        fechaEnd.setDate(this.max);
-    }
-        
-    private void init(){
         String cadena;
         cadena = "<html><body>"
                 + "APLICAR<br>"
@@ -39,6 +32,15 @@ public class TabFiltros extends javax.swing.JPanel {
                 + "FILTROS<br></body>"
                 + "</html>";
         botonReset.setText(cadena);
+    }
+        
+    
+    public void init(LocalDate min, LocalDate max){
+        this.min = toDate(min);
+        this.max = toDate(max);
+        limitarFecha(this.min, this.max);
+        fechaStart.setDate(this.min);
+        fechaEnd.setDate(this.max);
     }
     
     
@@ -295,12 +297,10 @@ public class TabFiltros extends javax.swing.JPanel {
     
     private void checkRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRutasActionPerformed
 
-        
     }//GEN-LAST:event_checkRutasActionPerformed
         
     private void checkLugaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkLugaresActionPerformed
 
-        
     }//GEN-LAST:event_checkLugaresActionPerformed
 
     private void botonFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFiltroActionPerformed

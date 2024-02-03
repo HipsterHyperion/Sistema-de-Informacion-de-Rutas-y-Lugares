@@ -3,15 +3,17 @@ package vista;
 
 import modelo.entidad.PlaceVisit;
 import modelo.entidad.ActivitySegment;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import modelo.entidad.MyEvent;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class PanelGraph extends javax.swing.JPanel {
@@ -19,19 +21,13 @@ public class PanelGraph extends javax.swing.JPanel {
     
     public PanelGraph() {
         initComponents();
-        jPanel1.setLayout(new BorderLayout());
-    }
-    
-    public void init(List<ActivitySegment> activitySegments, 
-        List<PlaceVisit> placeVisits){
-        initGraficoRutas(activitySegments);
-        initGraficoLugares(placeVisits);
-        
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
     }
     
     
     public void initGraficoRutas(List<ActivitySegment> activitySegments){
         
+        jPanel1.removeAll();
         DefaultCategoryDataset datos = new DefaultCategoryDataset();        
         for( ActivitySegment act : activitySegments){
             datos.setValue((Number)act.getDistanceMeters(), 
@@ -58,50 +54,54 @@ public class PanelGraph extends javax.swing.JPanel {
 //        }        
 //        panel.setPreferredSize(new Dimension(tam*5,360+extra));
 
-        jPanel1.add(panel,BorderLayout.NORTH);
+        jPanel1.add(panel);
         updateUI();
         
     }
     
-    public void initGraficoLugares(List<PlaceVisit> placeVisits){
+    public void initGraficoLugares(SortedMap<LocalDate, List<MyEvent>> lineaDeEventos){
         
-        LocalDateTime fechaHora1;
-        LocalDateTime fechaHora2;
-        DefaultCategoryDataset datos = new DefaultCategoryDataset();
-        for( PlaceVisit plv : placeVisits){
-            
-            fechaHora1 = plv.getStartTimestamp();
-            fechaHora2 = plv.getEndTimestamp();
-            if(fechaHora1.getDayOfMonth()== fechaHora2.getDayOfMonth()){
-                datos.setValue((Number)ChronoUnit.MINUTES.between(fechaHora1, fechaHora2), 
-                        fechaHora1.toLocalTime(), 
-                        fechaHora1.getDayOfMonth());
+        jPanel1.removeAll();
+        Map<String, DefaultCategoryDataset> datosMap = new HashMap<>();
+        String fechazo;
+        List<String> listaFechazo = new ArrayList<>();
+        for(LocalDate fecha : lineaDeEventos.keySet()){
+            System.out.println(lineaDeEventos.get(fecha).size());
+            fechazo = fecha.getMonth().toString()+" "+ fecha.getYear();
+            if(datosMap.get(fechazo)==null){
+                listaFechazo.add(fechazo);
+                datosMap.put(fechazo,  new DefaultCategoryDataset());
+                datosMap.get(fechazo).setValue((Number)0, 
+                        fecha.atStartOfDay().toLocalTime(), 
+                        fecha.getDayOfMonth());
             }
-            else
-            {
-                LocalDateTime aux = fechaHora1.toLocalDate().plusDays(1).atStartOfDay();
-                datos.setValue((Number)ChronoUnit.MINUTES.between(fechaHora1, aux), 
-                        fechaHora1.toLocalTime(), 
-                        fechaHora1.getDayOfMonth());
-                
-                datos.setValue((Number)ChronoUnit.MINUTES.between(aux, fechaHora2), 
-                        aux.toLocalTime(), 
-                        aux.getDayOfMonth());
+            for(MyEvent placeVisit : lineaDeEventos.get(fecha)){
+                if(placeVisit instanceof PlaceVisit){
+                    LocalDateTime fechaHora;
+                    fechaHora = placeVisit.getStartTimestamp();
+                    datosMap.get(fechazo).setValue((Number)placeVisit.getDuration(), 
+                            fechaHora.toLocalTime(), 
+                            fechaHora.getDayOfMonth());
+                }
             }
         }
-        JFreeChart grafico = ChartFactory.createStackedBarChart("LUGARES",
-                "DIAS",
-                "MINUTOS",
-                datos);
-        grafico.removeLegend();
+        
+        for(String m :  listaFechazo){
+            if(datosMap.get(m).getRowCount()>1){
+                JFreeChart grafico;
+                grafico = ChartFactory.createStackedBarChart(m,
+                        "DIAS",
+                        "MINUTOS",
+                        datosMap.get(m));
+                grafico.removeLegend();
 
-        ChartPanel chart = new ChartPanel(grafico);
-        chart.setMouseWheelEnabled(false);
+                ChartPanel chart = new ChartPanel(grafico);
+                chart.setMouseWheelEnabled(false);
+
+                jPanel1.add(chart);
+            }
+        }
         
-//        int tam = placeVisits.size();
-//        chart.setPreferredSize(new Dimension(tam2*5,360));
-        
-        jPanel1.add(chart);
         updateUI();
     }
     
