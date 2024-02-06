@@ -35,10 +35,11 @@ public class MainPanel extends javax.swing.JPanel {
         tabFechas = new TabFechas(this );
         tabFechas.init(control.getLineaDeEventos().keySet());
         tabFiltro = new TabFiltros(this);
-        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1).toString(), formato);
-        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1).toString(), formato);
+        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1), formato);
+        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1), formato);
         tabFiltro.init(fechaMin, fechaMax);
-        tabRutas = new TabRutas(this, control.getLineaDeEventos(), control.getActivitySegments());
+        tabRutas = new TabRutas(this);
+        tabRutas.init(control.getLineaDeEventos());
         tabLug = new TabLugares(this);
         tabLug.init(control.getLineaDeEventos(),  control.getPlaceVisits());
         tabConf = new TabConfiguracion(this);
@@ -51,11 +52,11 @@ public class MainPanel extends javax.swing.JPanel {
     
     public void reInit(){
         tabFechas.init(control.getLineaDeEventos().keySet());
-        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1).toString(), formato);
-        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1).toString(), formato);
+        LocalDate fechaMin = LocalDate.parse(tabFechas.getFechasBox().getItemAt(1), formato);
+        LocalDate fechaMax = LocalDate.parse(tabFechas.getFechasBox().getItemAt(tabFechas.getFechasBox().getItemCount()-1), formato);
         tabFiltro.init(fechaMin, fechaMax);
         tabLug.init(control.getLineaDeEventos(),  control.getPlaceVisits());
-        
+        tabRutas.init(control.getLineaDeEventos());
     }
     
     public PanelMapViewer getjXMapViewer() {

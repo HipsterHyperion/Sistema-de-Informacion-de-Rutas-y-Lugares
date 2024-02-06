@@ -25,39 +25,54 @@ public class PanelGraph extends javax.swing.JPanel {
     }
     
     
-    public void initGraficoRutas(List<ActivitySegment> activitySegments){
+     public void initGraficoRutas(SortedMap<LocalDate, List<MyEvent>> lineaDeEventos){
         
         jPanel1.removeAll();
-        DefaultCategoryDataset datos = new DefaultCategoryDataset();        
-        for( ActivitySegment act : activitySegments){
-            datos.setValue((Number)act.getDistanceMeters(), 
-                    act.getStartTimestamp().toLocalTime(), 
-                    act.getStartTimestamp().getDayOfMonth());
+        Map<String, DefaultCategoryDataset> datosMap = new HashMap<>();
+        String fechazo;
+        List<String> listaFechazo = new ArrayList<>();
+        for(LocalDate fecha : lineaDeEventos.keySet()){
+            System.out.println(lineaDeEventos.get(fecha).size());
+            fechazo = fecha.getMonth().toString()+" "+ fecha.getYear();
+            if(datosMap.get(fechazo)==null){
+                listaFechazo.add(fechazo);
+                datosMap.put(fechazo,  new DefaultCategoryDataset());
+                datosMap.get(fechazo).setValue((Number)0, 
+                        fecha.atStartOfDay().toLocalTime(), 
+                        fecha.getDayOfMonth());
+            }
+            for(MyEvent activitySegment : lineaDeEventos.get(fecha)){
+                if(activitySegment instanceof ActivitySegment){
+                    LocalDateTime fechaHora;
+                    fechaHora = activitySegment.getStartTimestamp();
+                    datosMap.get(fechazo).setValue((Number)((ActivitySegment) activitySegment).getDistanceMeters(), 
+                            fechaHora.toLocalTime(), 
+                            fechaHora.getDayOfMonth());
+                }
+            }
         }
         
-        JFreeChart grafico = ChartFactory.createStackedBarChart("RUTAS",
-                "DIAS",
-                "METROS",
-                datos);
-        grafico.removeLegend();
-                
-        ChartPanel panel = new ChartPanel(grafico);
-        panel.setMouseWheelEnabled(false);
-        
-//        int tam = activitySegments.size();
-//        int extra = 0;
-//        if(((CategoryPlot)grafico.getPlot()).getRangeAxis().getUpperBound()>14000){
-//            
-//            double aux  = ((CategoryPlot)grafico.getPlot()).getRangeAxis().getUpperBound()/1400;
-//            extra = (int)(aux-10)*18;
-//            System.out.println(extra);
-//        }        
-//        panel.setPreferredSize(new Dimension(tam*5,360+extra));
+        for(String m :  listaFechazo){
+            if(datosMap.get(m).getRowCount()>1){
+                JFreeChart grafico;
+                grafico = ChartFactory.createStackedBarChart(m,
+                        "DIAS",
+                        "METROS",
+                        datosMap.get(m));
+                grafico.removeLegend();
 
-        jPanel1.add(panel);
-        updateUI();
+                ChartPanel chart = new ChartPanel(grafico);
+                chart.setMouseWheelEnabled(false);
+
+                jPanel1.add(chart);
+            }
+        }
         
+        updateUI();
     }
+    
+    
+    
     
     public void initGraficoLugares(SortedMap<LocalDate, List<MyEvent>> lineaDeEventos){
         

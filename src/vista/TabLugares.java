@@ -32,26 +32,9 @@ public class TabLugares extends javax.swing.JPanel {
         panelGraph1.initGraficoLugares(lineaDeEventos);
     }
     
-    public void initTable(List<PlaceVisit> placeVisits){
-        tabla = new JTable();
-        System.out.println(placeVisits.size());
-        Map<String, List<PlaceVisit>> direccionesMapa = new HashMap<>();
-        List<String> direccionesLista = new ArrayList<>();
-        for(PlaceVisit p : placeVisits){
-            String dire = p.getAddress();
-            if(direccionesMapa.containsKey(dire)){
-                direccionesMapa.get(dire).add(p);
-            }
-            else{
-                direccionesMapa.put(dire, new ArrayList<>());
-                direccionesMapa.get(dire).add(p);
-                direccionesLista.add(dire);
-            }
-        }
-        Collections.sort(direccionesLista);
-        
-        int tam = placeVisits.size();
-        Object[][] data = new Object[tam][7];
+    private JTable crearTablaBase(int tamanio){
+        JTable tabla = new JTable();
+        Object[][] data = new Object[tamanio][7];
         String[] columnas = {"Direccion", "Fecha", "Hora", "Duracion", "Latitud", "Longitud", "Comentarios"};
 
         
@@ -88,15 +71,35 @@ public class TabLugares extends javax.swing.JPanel {
         tabla.getColumnModel().getColumn(5).setMaxWidth(80);
         tabla.getColumnModel().getColumn(6).setMinWidth(240);
         tabla.getColumnModel().getColumn(6).setMaxWidth(480);
-        jScrollPane1.setViewportView(tabla);
+        return tabla;
+    }
+    
+    
+    
+    public void initTable(List<PlaceVisit> placeVisits){
+        this.tabla = crearTablaBase(placeVisits.size());
+        System.out.println(placeVisits.size());
+        Map<String, List<PlaceVisit>> direccionesMapa = new HashMap<>();
+        List<String> direccionesLista = new ArrayList<>();
+        for(PlaceVisit p : placeVisits){
+            String dire = p.getAddress();
+            if(direccionesMapa.containsKey(dire)){
+                direccionesMapa.get(dire).add(p);
+            }
+            else{
+                direccionesMapa.put(dire, new ArrayList<>());
+                direccionesMapa.get(dire).add(p);
+                direccionesLista.add(dire);
+            }
+        }
+        Collections.sort(direccionesLista);
+
 
         ColorCeldaTabla color = new ColorCeldaTabla();
         color.initCelda();
         int i=0;
-        int semitam = 0;
         for(String d: direccionesLista){
             color.setColor(direccionesMapa.get(d).size());
-//            semitam = semitam + direccionesMapa.get(d).size();
             for(PlaceVisit p : direccionesMapa.get(d)){
                 color.setColor2(p.getDuration());
                 tabla.setValueAt(p.getAddress(), i, 0);
@@ -111,6 +114,7 @@ public class TabLugares extends javax.swing.JPanel {
         tabla.getColumnModel().getColumn(0).setCellRenderer(color);
         tabla.getColumnModel().getColumn(3).setCellRenderer(color);
         
+        jScrollPane1.setViewportView(tabla);
         updateUI();
     }
 

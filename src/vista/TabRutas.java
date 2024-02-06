@@ -16,25 +16,25 @@ import modelo.entidad.MyEvent;
 public class TabRutas extends javax.swing.JPanel {
 
     
-    private JTable tabla;
     private MainPanel mainPanel;
     private int metrosMax;
     
     
-    public TabRutas(MainPanel mainPanel, SortedMap<LocalDate, List<MyEvent>> eventos, List<ActivitySegment> lista ) {
+    public TabRutas(MainPanel mainPanel  ) {
         this.mainPanel = mainPanel;
         metrosMax = 0;
         initComponents();
-        initTable(eventos);
-        panelGraph1.initGraficoRutas(lista);
     }
 
+    public void init(SortedMap<LocalDate, List<MyEvent>> eventos){
+        initTable(eventos);
+        panelGraph1.initGraficoRutas(eventos);
+    }
     
-    public void initTable(SortedMap<LocalDate, List<MyEvent>> eventos){
-        tabla = new JTable();
-        
-        int tam = eventos.keySet().size();
-        Object[][] data = new Object[tam][4];
+    
+    private JTable crearTablaBase(int tamanio){
+        JTable tabla = new JTable();
+        Object[][] data = new Object[tamanio][4];
         String[] columnas = {"Fecha", "Actividad Total", "Metros Total", "Comentarios"};
         
         
@@ -57,25 +57,6 @@ public class TabRutas extends javax.swing.JPanel {
             }
         });
         
-        Map<String, List<ActivitySegment>> actividades = new HashMap<>();
-        List<String> direccionesLista = new ArrayList<>();
-        int metrosMax = 0;
-        int i = 0;
-        for(LocalDate l: eventos.keySet()){
-            int cantidadActividad=0;
-            int metrosTotales =0;
-            for(MyEvent m: eventos.get(l)){
-                if(m instanceof ActivitySegment){
-                    metrosTotales = metrosTotales + ((ActivitySegment) m).getDistance();
-                    cantidadActividad++;
-                }
-            }
-            tabla.setValueAt(l, i, 0);
-            tabla.setValueAt(cantidadActividad, i, 1);
-            tabla.setValueAt(metrosTotales, i, 2);
-            i++;
-        }
-        
         tabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
         tabla.setRowHeight(24);
@@ -87,11 +68,35 @@ public class TabRutas extends javax.swing.JPanel {
         tabla.getColumnModel().getColumn(2).setMaxWidth(120);
         tabla.getColumnModel().getColumn(3).setMinWidth(240);
         tabla.getColumnModel().getColumn(3).setMaxWidth(480);
-        jScrollPane1.setViewportView(tabla);
-
+        
+        return tabla;
+    }
+    
+    public void initTable(SortedMap<LocalDate, List<MyEvent>> eventos){
+        JTable tabla = crearTablaBase(eventos.keySet().size());
+        
+//        Map<String, List<ActivitySegment>> actividades = new HashMap<>();
+//        List<String> direccionesLista = new ArrayList<>();
+//        int metrosMax = 0;
+        int i = 0;
+        for(LocalDate l: eventos.keySet()){
+            int cantidadActividad=0;
+            int metrosTotales =0;
+            for(MyEvent m: eventos.get(l)){
+                if(m instanceof ActivitySegment){
+                    metrosTotales = metrosTotales + ((ActivitySegment) m).getDistanceMeters();
+                    cantidadActividad++;
+                }
+            }
+            tabla.setValueAt(l, i, 0);
+            tabla.setValueAt(cantidadActividad, i, 1);
+            tabla.setValueAt(metrosTotales, i, 2);
+            i++;
+        }
 //        ColorCeldaTabla color = new ColorCeldaTabla();
 //        tabla.getColumnModel().getColumn(0).setCellRenderer(color);
-        
+
+        jScrollPane1.setViewportView(tabla);
         updateUI();
     }
     
