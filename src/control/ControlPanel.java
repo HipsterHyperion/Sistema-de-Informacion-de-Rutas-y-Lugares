@@ -40,6 +40,23 @@ public class ControlPanel {
         MainFrame.getInstance().nuevoTab(title, mainPanel);
     }
     
+    public Set<MyWaypoint> getWaypoints(){
+        return repositorio.getWaypoints();
+    }
+    
+    public List<ActivitySegment> getActivitySegments(){
+        return repositorio.getActivitySegments();
+    }
+    
+    public List<PlaceVisit> getPlaceVisits(){
+        return repositorio.getPlaceVisits();
+    }
+    
+    public SortedMap<LocalDate, List<MyEvent>> getLineaDeEventos() {
+        return repositorio.getLineaDeEventos();
+    }
+    
+    
     public EventWaypoint getEvent() {
         return new EventWaypoint() {
             @Override
@@ -69,18 +86,6 @@ public class ControlPanel {
         
     }
     
-    public Set<MyWaypoint> getWaypoints(){
-        return repositorio.getWaypoints();
-    }
-    
-    
-    public List<ActivitySegment> getActivitySegments(){
-        return repositorio.getActivitySegments();
-    }
-    
-    public List<PlaceVisit> getPlaceVisits(){
-        return repositorio.getPlaceVisits();
-    }
     
     public void initPanelEventos(LocalDate fecha){
         
@@ -102,30 +107,21 @@ public class ControlPanel {
     }
     
     
-    public void stateChanged(){
-//        if(mainPanel.getTabFiltro().isFiltroActivado()){
-//            
-//        }
-//        else{
-//            if(mainPanel.getTabFiltro().getCheckRutas() == true 
-//                    && mainPanel.getTabFiltro().getCheckUbicaciones() == true){
-//                
-//            }
-//            else{
-//            }
-//        }
-            
+    public void filtroCheckers(){
     }
     
     public void aplicarFiltros(){
-        Set<MyWaypoint> filtro = new HashSet<>();
+        Set<MyWaypoint> waypointFiltrado = new HashSet<>();
         LocalDate fechaStart;
         LocalDate fechaEnd;
+        //Comparo las fechas de los filtro para saber cual es menor y cual es el mayor.
         if(mainPanel.getTabFiltro().getFechaStart().compareTo(mainPanel.getTabFiltro().getFechaEnd())<1){
+            //Salida por true: fechaStart < fechaEnd.
             fechaStart = mainPanel.getTabFiltro().getFechaStart();
             fechaEnd = mainPanel.getTabFiltro().getFechaEnd();
         }
         else{
+            //Salida por false: fechaEnd < fechaStart.
             fechaStart = mainPanel.getTabFiltro().getFechaEnd();
             fechaEnd = mainPanel.getTabFiltro().getFechaStart();
         }
@@ -138,7 +134,7 @@ public class ControlPanel {
                     *p.getStartTimestamp().toLocalDate().compareTo(fechaEnd)
                     <1){
                 if(pEnd.compareTo(horaStart)*pStart.compareTo(horaEnd)<1){
-                    filtro.add(p.getMainWaypoint());
+                    waypointFiltrado.add(p.getMainWaypoint());
                 }
             }
         }
@@ -149,11 +145,11 @@ public class ControlPanel {
                 String aEnd = a.getEndTimestamp().toString().substring(11);
                 String aStart = a.getStartTimestamp().toString().substring(11);
                 if(aEnd.compareTo(horaStart)*aStart.compareTo(horaEnd)<1){
-                    filtro.add(a.getMainWaypoint());
+                    waypointFiltrado.add(a.getMainWaypoint());
                 }
             }
         }
-        mainPanel.getjXMapViewer().setWaypoints(filtro);
+        mainPanel.getjXMapViewer().setWaypoints(waypointFiltrado);
         
     }
     
@@ -168,9 +164,4 @@ public class ControlPanel {
     }
     
 
-    public SortedMap<LocalDate, List<MyEvent>> getLineaDeEventos() {
-        return repositorio.getLineaDeEventos();
-    }
-    
-    
 }

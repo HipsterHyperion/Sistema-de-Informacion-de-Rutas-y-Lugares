@@ -78,7 +78,6 @@ public class TabLugares extends javax.swing.JPanel {
     
     public void initTable(List<PlaceVisit> placeVisits){
         this.tabla = crearTablaBase(placeVisits.size());
-        System.out.println(placeVisits.size());
         Map<String, List<PlaceVisit>> direccionesMapa = new HashMap<>();
         List<String> direccionesLista = new ArrayList<>();
         for(PlaceVisit p : placeVisits){
@@ -119,7 +118,6 @@ public class TabLugares extends javax.swing.JPanel {
     }
 
     private void buscarDireccion(){
-        System.out.println("asdasd");
         int r;
         r = tabla.getSelectedRow();
         if(r>=0){

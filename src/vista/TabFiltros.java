@@ -32,8 +32,26 @@ public class TabFiltros extends javax.swing.JPanel {
                 + "FILTROS<br></body>"
                 + "</html>";
         botonReset.setText(cadena);
+        
+        checkRutas.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtroCheckers();
+            }
+        });
+        
+        checkLugares.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtroCheckers();
+            }
+        });
     }
         
+    private void filtroCheckers(){
+        mainPanel.filtroCheckers(!checkRutas.isSelected(), !checkLugares.isSelected());
+    }
+    
     
     public void init(LocalDate min, LocalDate max){
         this.min = toDate(min);
@@ -165,20 +183,10 @@ public class TabFiltros extends javax.swing.JPanel {
         checkLugares.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
         checkLugares.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/pin.png"))); // NOI18N
         checkLugares.setText("Lugares");
-        checkLugares.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkLugaresActionPerformed(evt);
-            }
-        });
 
         checkRutas.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
         checkRutas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/flag_verde.png"))); // NOI18N
         checkRutas.setText("Rutas");
-        checkRutas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkRutasActionPerformed(evt);
-            }
-        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -294,15 +302,7 @@ public class TabFiltros extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    
-    private void checkRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRutasActionPerformed
-
-    }//GEN-LAST:event_checkRutasActionPerformed
-        
-    private void checkLugaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkLugaresActionPerformed
-
-    }//GEN-LAST:event_checkLugaresActionPerformed
-
+            
     private void botonFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFiltroActionPerformed
         filtrar();
     }//GEN-LAST:event_botonFiltroActionPerformed

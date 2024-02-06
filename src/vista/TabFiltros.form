@@ -98,9 +98,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Lugares"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkLugaresActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="checkRutas">
       <Properties>
@@ -112,9 +109,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Rutas"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkRutasActionPerformed"/>
-      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel2">
       <Properties>

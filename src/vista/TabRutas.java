@@ -3,10 +3,7 @@
 package vista;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import javax.swing.JTable;
 import modelo.entidad.ActivitySegment;

@@ -178,5 +178,31 @@ public class PanelMapViewer extends JXMapViewer {
         setTileFactory(tileFactory);
     }
     
+    public void setTypeWaypoint(boolean activitySegment, boolean placeVisit){
+        clearWaypoint();
+        if(!activitySegment || !placeVisit){
+            Set<MyWaypoint> s = new HashSet<>();
+            for(MyWaypoint w: waypoints){
+                if(placeVisit && w.getPointType().equals(MyWaypoint.PointType.PLACEVISIT)){
+                    s.add(w);
+                }
+                if(activitySegment && w.getPointType().equals(MyWaypoint.PointType.STARTLOCATION)){
+                    s.add(w);
+                }
+            }
+            WaypointPainter<MyWaypoint> wp = new WaypointRender();
+            wp.setWaypoints(s);
+            this.setOverlayPainter(wp);
+
+            for (MyWaypoint mywaypoint : s) {
+                this.add(mywaypoint.getButton());
+            }
+            
+        }
+        else{
+            initWaypoint();
+        }
+    }
+    
     
 }

@@ -32,7 +32,6 @@ public class PanelGraph extends javax.swing.JPanel {
         String fechazo;
         List<String> listaFechazo = new ArrayList<>();
         for(LocalDate fecha : lineaDeEventos.keySet()){
-            System.out.println(lineaDeEventos.get(fecha).size());
             fechazo = fecha.getMonth().toString()+" "+ fecha.getYear();
             if(datosMap.get(fechazo)==null){
                 listaFechazo.add(fechazo);
@@ -81,7 +80,6 @@ public class PanelGraph extends javax.swing.JPanel {
         String fechazo;
         List<String> listaFechazo = new ArrayList<>();
         for(LocalDate fecha : lineaDeEventos.keySet()){
-            System.out.println(lineaDeEventos.get(fecha).size());
             fechazo = fecha.getMonth().toString()+" "+ fecha.getYear();
             if(datosMap.get(fechazo)==null){
                 listaFechazo.add(fechazo);

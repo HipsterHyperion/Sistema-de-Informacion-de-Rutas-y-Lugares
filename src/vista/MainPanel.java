@@ -83,8 +83,9 @@ public class MainPanel extends javax.swing.JPanel {
         }
     }
     
-    public void stateChanged(){
-        control.stateChanged();
+    public void filtroCheckers(boolean rutas, boolean lugares){
+//        control.filtroCheckers(rutas, lugares);
+        mapViewer.setTypeWaypoint(rutas, lugares);
     }
     
     public void aplicarFiltros(){
